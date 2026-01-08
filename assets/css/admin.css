@@ -1,0 +1,358 @@
+/**
+ * Easy Categories Shift64 - Admin Styles
+ */
+
+/* Container */
+.ecs64-wrap {
+    max-width: 1200px;
+}
+
+/* Toolbar */
+.ecs64-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 20px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.ecs64-filters {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ecs64-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.ecs64-filter input[type="checkbox"] {
+    margin: 0;
+}
+
+/* Legend */
+.ecs64-legend {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+}
+
+.ecs64-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #646970;
+}
+
+.ecs64-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ecs64-legend-color.ecs64-childless {
+    background: linear-gradient(135deg, #fef3cd 0%, #f6e58d 100%);
+}
+
+/* Status indicator */
+.ecs64-status {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ecs64-status.visible {
+    opacity: 1;
+}
+
+.ecs64-status.saving {
+    background: #e7f3ff;
+    color: #0073aa;
+}
+
+.ecs64-status.saved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.ecs64-status.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Container */
+.ecs64-container {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    min-height: 400px;
+}
+
+/* Loading */
+.ecs64-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px;
+    color: #646970;
+}
+
+.ecs64-loading .spinner {
+    float: none;
+    margin: 0;
+}
+
+/* Category Tree */
+.ecs64-category-tree {
+    padding: 10px 0;
+}
+
+.ecs64-category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ecs64-category-list .ecs64-category-list {
+    margin-left: 30px;
+    border-left: 2px solid #e2e4e7;
+    padding-left: 0;
+}
+
+/* Category Item */
+.ecs64-category-item {
+    margin: 0;
+    padding: 0;
+}
+
+.ecs64-category-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f1;
+    background: #fff;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ecs64-category-row:hover {
+    background: #f6f7f7;
+}
+
+/* Childless highlight - tylko kategorie główne bez podkategorii */
+.ecs64-highlight-childless>.ecs64-category-list>.ecs64-category-item.ecs64-no-children>.ecs64-category-row {
+    background: linear-gradient(135deg, #fffef5 0%, #fef9e7 100%);
+    border-left: 3px solid #f1c40f;
+}
+
+.ecs64-highlight-childless>.ecs64-category-list>.ecs64-category-item.ecs64-no-children>.ecs64-category-row:hover {
+    background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%);
+}
+
+/* Drag handle */
+.ecs64-drag-handle {
+    cursor: grab;
+    padding: 5px;
+    color: #8c8f94;
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.15s ease;
+}
+
+.ecs64-drag-handle:hover {
+    color: #2271b1;
+}
+
+.ecs64-drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Category info */
+.ecs64-category-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ecs64-category-name {
+    font-weight: 500;
+    color: #1d2327;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ecs64-category-id {
+    color: #8c8f94;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.ecs64-category-count {
+    color: #646970;
+    font-size: 12px;
+    white-space: nowrap;
+    background: #f0f0f1;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* Move buttons */
+.ecs64-move-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+.ecs64-move-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    background: #f6f7f7;
+    color: #50575e;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s ease;
+}
+
+.ecs64-move-btn:hover {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.ecs64-move-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ecs64-move-btn:disabled:hover {
+    background: #f6f7f7;
+    border-color: #c3c4c7;
+    color: #50575e;
+}
+
+/* Sortable states */
+.ecs64-category-item.ui-sortable-helper {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.ecs64-category-item.ui-sortable-helper .ecs64-category-row {
+    border-radius: 4px;
+}
+
+.ecs64-category-list .ui-sortable-placeholder {
+    height: 48px;
+    background: #e7f3ff;
+    border: 2px dashed #2271b1;
+    border-radius: 4px;
+    visibility: visible !important;
+}
+
+/* Depth indicators */
+.ecs64-depth-indicator {
+    display: inline-flex;
+    gap: 2px;
+    margin-right: 5px;
+}
+
+.ecs64-depth-dash {
+    color: #c3c4c7;
+    font-weight: 300;
+}
+
+/* Help section */
+.ecs64-help {
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: #f0f6fc;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    border-left: 4px solid #2271b1;
+}
+
+.ecs64-help h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #1d2327;
+}
+
+.ecs64-help ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.ecs64-help li {
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #50575e;
+}
+
+/* Parent only mode */
+.ecs64-parent-only .ecs64-category-list .ecs64-category-list {
+    display: none;
+}
+
+/* Ukryj drag handle i przyciski lewo/prawo w trybie parent-only */
+.ecs64-parent-only .ecs64-drag-handle {
+    display: none;
+}
+
+.ecs64-parent-only .ecs64-move-btn[data-action="move_left"],
+.ecs64-parent-only .ecs64-move-btn[data-action="move_right"] {
+    display: none;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .ecs64-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ecs64-legend {
+        margin-left: 0;
+    }
+
+    .ecs64-category-row {
+        flex-wrap: wrap;
+    }
+
+    .ecs64-category-info {
+        order: 1;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .ecs64-drag-handle {
+        order: 0;
+    }
+
+    .ecs64-move-buttons {
+        order: 2;
+        margin-left: auto;
+    }
+}
