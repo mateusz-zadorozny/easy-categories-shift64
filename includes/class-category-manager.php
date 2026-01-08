@@ -210,7 +210,7 @@ class Category_Manager {
 		$siblings      = $this->get_siblings( $category_id, (int) $category->parent );
 		$current_index = $this->find_index( $siblings, $category_id );
 
-		if ( false === $current_index || $current_index === count( $siblings ) - 1 ) {
+		if ( false === $current_index || count( $siblings ) - 1 === $current_index ) {
 			return false; // Already at bottom.
 		}
 
@@ -315,7 +315,7 @@ class Category_Manager {
 	 */
 	public function set_category_order( int $category_id, int $new_order ): bool {
 		$result = update_term_meta( $category_id, 'order', $new_order );
-		return $result !== false;
+		return false !== $result;
 	}
 
 	/**
@@ -403,13 +403,13 @@ class Category_Manager {
 	/**
 	 * Find index of category in list.
 	 *
-	 * @param array $list        List of categories.
+	 * @param array $items       List of categories.
 	 * @param int   $category_id Category ID to find.
 	 * @return int|false Index or false if not found.
 	 */
-	private function find_index( array $list, int $category_id ): int|false {
-		foreach ( $list as $index => $item ) {
-			if ( $item['id'] === $category_id ) {
+	private function find_index( array $items, int $category_id ): int|false {
+		foreach ( $items as $index => $item ) {
+			if ( $category_id === $item['id'] ) {
 				return $index;
 			}
 		}
@@ -419,15 +419,15 @@ class Category_Manager {
 	/**
 	 * Get maximum order value from list.
 	 *
-	 * @param array $list List of categories with order.
+	 * @param array $items List of categories with order.
 	 * @return int Maximum order value.
 	 */
-	private function get_max_order( array $list ): int {
-		if ( empty( $list ) ) {
+	private function get_max_order( array $items ): int {
+		if ( empty( $items ) ) {
 			return 0;
 		}
 
-		return max( array_column( $list, 'order' ) );
+		return max( array_column( $items, 'order' ) );
 	}
 
 	/**
@@ -475,7 +475,7 @@ class Category_Manager {
 			$new_order   = isset( $item['order'] ) ? (int) $item['order'] : 0;
 
 			// Update parent if provided.
-			if ( $new_parent !== null ) {
+			if ( null !== $new_parent ) {
 				wp_update_term(
 					$category_id,
 					self::TAXONOMY,
