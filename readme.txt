@@ -3,7 +3,7 @@ Contributors: mateuszz
 Donate link: https://shift64.com
 Tags: woocommerce, categories, reorder, drag-drop, product categories
 Requires at least: 6.8
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 8.0
 WC requires at least: 10.0
 WC tested up to: 10.0

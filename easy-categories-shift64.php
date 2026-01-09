@@ -11,6 +11,8 @@
  * Requires PHP:    8.0
  * Requires at least: 6.8
  * WC requires at least: 10.0
+ * License:         GPL-2.0-or-later
+ * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package Easy_Categories_Shift64
  */
@@ -223,11 +225,3 @@ function ecs64_handle_get_categories( \WP_REST_Request $request ): \WP_REST_Resp
 		200
 	);
 }
-
-/**
- * Load text domain for translations
- */
-function ecs64_load_textdomain(): void {
-	load_plugin_textdomain( 'easy-categories-shift64', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-}
-add_action( 'init', __NAMESPACE__ . '\\ecs64_load_textdomain' );
