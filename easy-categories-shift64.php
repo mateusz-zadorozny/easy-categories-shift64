@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:     Easy Categories Shift64
- * Plugin URI:      https://shift64.com
  * Description:     Drag & drop WooCommerce product category ordering with hierarchy management
  * Author:          SHIFT64
  * Author URI:      https://shift64.com
