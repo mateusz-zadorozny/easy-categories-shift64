@@ -252,6 +252,35 @@
     color: #50575e;
 }
 
+/* Position buttons (mega menu column) */
+.ecs64-position-buttons {
+    display: flex;
+    gap: 2px;
+    margin-right: 10px;
+}
+
+.ecs64-position-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    background: #f6f7f7;
+    color: #50575e;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+
+.ecs64-position-btn:hover {
+    background: #e0e0e0;
+    border-color: #8c8f94;
+}
+
 /* Sortable states */
 .ecs64-category-item.ui-sortable-helper {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);

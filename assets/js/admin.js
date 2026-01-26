@@ -117,6 +117,21 @@
                                 <span class="ecs64-category-id">(ID: ${cat.id})</span>
                                 <span class="ecs64-category-count">${cat.count} ${ecs64Data.i18n.products}</span>
                             </div>
+
+                            <div class="ecs64-position-buttons">
+                                <button type="button"
+                                        class="ecs64-position-btn"
+                                        data-position="left"
+                                        title="${ecs64Data.i18n.positionLeft}">L</button>
+                                <button type="button"
+                                        class="ecs64-position-btn"
+                                        data-position="right"
+                                        title="${ecs64Data.i18n.positionRight}">R</button>
+                                <button type="button"
+                                        class="ecs64-position-btn"
+                                        data-position="none"
+                                        title="${ecs64Data.i18n.positionNone}">-</button>
+                            </div>
                             
                             <div class="ecs64-move-buttons">
                                 <button type="button" 
