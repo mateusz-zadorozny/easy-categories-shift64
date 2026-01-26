@@ -391,8 +391,41 @@
         order: 0;
     }
 
-    .ecs64-move-buttons {
+    .ecs64-position-buttons {
         order: 2;
+        margin-right: 5px;
+    }
+
+    .ecs64-move-buttons {
+        order: 3;
         margin-left: auto;
+    }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 480px) {
+    .ecs64-category-row {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .ecs64-position-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .ecs64-move-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .ecs64-category-list .ecs64-category-list {
+        margin-left: 15px;
+    }
+
+    .ecs64-depth-indicator {
+        display: none;
     }
 }

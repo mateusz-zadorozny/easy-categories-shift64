@@ -61,6 +61,7 @@
             // Move buttons
             $(document).on('click', '.ecs64-move-btn', function (e) {
                 e.preventDefault();
+                e.stopPropagation();
                 if ($(this).prop('disabled') || self.isLoading) return;
 
                 const $item = $(this).closest('.ecs64-category-item');
@@ -73,6 +74,7 @@
             // Position buttons
             $(document).on('click', '.ecs64-position-btn', function (e) {
                 e.preventDefault();
+                e.stopPropagation();
                 if ($(this).prop('disabled') || self.isLoading) return;
 
                 const $item = $(this).closest('.ecs64-category-item');
