@@ -9,3 +9,5 @@ vendor/
 *.tar.gz
 *.zip
 .vscode/settings.json
+.ralph-tui/
+.claude/
