@@ -281,6 +281,17 @@
     border-color: #8c8f94;
 }
 
+.ecs64-position-btn.ecs64-position-active {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.ecs64-position-btn.ecs64-position-active:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
 /* Sortable states */
 .ecs64-category-item.ui-sortable-helper {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);

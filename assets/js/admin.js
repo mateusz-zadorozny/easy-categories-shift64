@@ -135,15 +135,15 @@
 
                             <div class="ecs64-position-buttons">
                                 <button type="button"
-                                        class="ecs64-position-btn"
+                                        class="ecs64-position-btn${cat.position === 'left' ? ' ecs64-position-active' : ''}"
                                         data-position="left"
                                         title="${ecs64Data.i18n.positionLeft}">L</button>
                                 <button type="button"
-                                        class="ecs64-position-btn"
+                                        class="ecs64-position-btn${cat.position === 'right' ? ' ecs64-position-active' : ''}"
                                         data-position="right"
                                         title="${ecs64Data.i18n.positionRight}">R</button>
                                 <button type="button"
-                                        class="ecs64-position-btn"
+                                        class="ecs64-position-btn${!cat.position || cat.position === '' ? ' ecs64-position-active' : ''}"
                                         data-position="none"
                                         title="${ecs64Data.i18n.positionNone}">-</button>
                             </div>

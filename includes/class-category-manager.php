@@ -135,6 +135,7 @@ class Category_Manager {
 					'parent'       => $category->parent,
 					'count'        => $category->count,
 					'order'        => (int) get_term_meta( $category->term_id, 'order', true ),
+					'position'     => $this->get_category_position( $category->term_id ),
 					'has_children' => ! empty( $children ),
 					'is_childless' => in_array( $category->term_id, $childless_ids, true ),
 					'children'     => $children,
