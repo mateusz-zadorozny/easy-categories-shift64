@@ -19,6 +19,11 @@
             this.categories = ecs64Data.categories || [];
             this.childlessIds = ecs64Data.childlessIds || [];
 
+            // Helper for easier nonce usage with wp.apiFetch
+            if (window.wp && window.wp.apiFetch) {
+                wp.apiFetch.use(wp.apiFetch.createNonceMiddleware(ecs64Data.nonce));
+            }
+
             this.renderTree();
             this.bindEvents();
             this.initSortable();
@@ -127,6 +132,26 @@
                 const childlessClass = cat.is_childless ? ' ecs64-no-children' : '';
                 const depthDashes = this.getDepthIndicator(depth);
 
+                // Position buttons only for depth 1 (first level subcategories)
+                let positionButtons = '';
+                if (depth === 1) {
+                    positionButtons = `
+                            <div class="ecs64-position-buttons">
+                                <button type="button"
+                                        class="ecs64-position-btn${cat.position === 'left' ? ' ecs64-position-active' : ''}"
+                                        data-position="left"
+                                        title="${ecs64Data.i18n.positionLeft}">L</button>
+                                <button type="button"
+                                        class="ecs64-position-btn${cat.position === 'right' ? ' ecs64-position-active' : ''}"
+                                        data-position="right"
+                                        title="${ecs64Data.i18n.positionRight}">R</button>
+                                <button type="button"
+                                        class="ecs64-position-btn${!cat.position || cat.position === '' ? ' ecs64-position-active' : ''}"
+                                        data-position="none"
+                                        title="${ecs64Data.i18n.positionNone}">-</button>
+                            </div>`;
+                }
+
                 html += `
                     <li class="ecs64-category-item${childlessClass}" 
                         data-id="${cat.id}" 
@@ -142,20 +167,7 @@
                                 <span class="ecs64-category-count">${cat.count} ${ecs64Data.i18n.products}</span>
                             </div>
 
-                            <div class="ecs64-position-buttons">
-                                <button type="button"
-                                        class="ecs64-position-btn${cat.position === 'left' ? ' ecs64-position-active' : ''}"
-                                        data-position="left"
-                                        title="${ecs64Data.i18n.positionLeft}">L</button>
-                                <button type="button"
-                                        class="ecs64-position-btn${cat.position === 'right' ? ' ecs64-position-active' : ''}"
-                                        data-position="right"
-                                        title="${ecs64Data.i18n.positionRight}">R</button>
-                                <button type="button"
-                                        class="ecs64-position-btn${!cat.position || cat.position === '' ? ' ecs64-position-active' : ''}"
-                                        data-position="none"
-                                        title="${ecs64Data.i18n.positionNone}">-</button>
-                            </div>
+                            ${positionButtons}
                             
                             <div class="ecs64-move-buttons">
                                 <button type="button" 
@@ -295,7 +307,7 @@
         },
 
         /**
-         * Set category position via AJAX
+         * Set category position via API
          *
          * @param {number} categoryId
          * @param {string} position - 'left', 'right', or '' (empty string)
@@ -310,37 +322,31 @@
             this.setCategorySaving(categoryId, true);
             this.showStatus('saving', ecs64Data.i18n.saving);
 
-            $.ajax({
-                url: ecs64Data.restUrl + 'update-order',
+            wp.apiFetch({
+                path: 'ecs64/v1/update-order',
                 method: 'POST',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('X-WP-Nonce', ecs64Data.nonce);
-                },
                 data: {
                     category_id: categoryId,
                     action: 'set_position',
                     position: position
-                },
-                success: function (response) {
-                    if (response.success) {
-                        self.categories = response.categories;
-                        self.renderTree();
-                        self.initSortable();
-                        self.showStatus('saved', ecs64Data.i18n.saved);
-                        // Show success feedback on the saved category
-                        self.showSuccessFeedback(categoryId);
-                    } else {
-                        self.showStatus('error', response.message || ecs64Data.i18n.error);
-                    }
-                },
-                error: function (xhr) {
-                    const message = xhr.responseJSON?.message || ecs64Data.i18n.error;
-                    self.showStatus('error', message);
-                },
-                complete: function () {
-                    self.isLoading = false;
-                    self.setCategorySaving(categoryId, false);
                 }
+            }).then(response => {
+                if (response.success) {
+                    self.categories = response.categories;
+                    self.renderTree();
+                    self.initSortable();
+                    self.showStatus('saved', ecs64Data.i18n.saved);
+                    // Show success feedback on the saved category
+                    self.showSuccessFeedback(categoryId);
+                } else {
+                    self.showStatus('error', response.message || ecs64Data.i18n.error);
+                }
+            }).catch(error => {
+                const message = error.message || error.code || ecs64Data.i18n.error;
+                self.showStatus('error', message);
+            }).finally(() => {
+                self.isLoading = false;
+                self.setCategorySaving(categoryId, false);
             });
         },
 
@@ -375,33 +381,27 @@
                 data.new_parent = newParent;
             }
 
-            $.ajax({
-                url: ecs64Data.restUrl + 'update-order',
+            wp.apiFetch({
+                path: 'ecs64/v1/update-order',
                 method: 'POST',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('X-WP-Nonce', ecs64Data.nonce);
-                },
-                data: data,
-                success: function (response) {
-                    if (response.success) {
-                        self.categories = response.categories;
-                        self.renderTree();
-                        self.initSortable();
-                        self.showStatus('saved', ecs64Data.i18n.saved);
-                        // Show success feedback on the saved category
-                        self.showSuccessFeedback(categoryId);
-                    } else {
-                        self.showStatus('error', response.message || ecs64Data.i18n.error);
-                    }
-                },
-                error: function (xhr) {
-                    const message = xhr.responseJSON?.message || ecs64Data.i18n.error;
-                    self.showStatus('error', message);
-                },
-                complete: function () {
-                    self.isLoading = false;
-                    self.setCategorySaving(categoryId, false);
+                data: data
+            }).then(response => {
+                if (response.success) {
+                    self.categories = response.categories;
+                    self.renderTree();
+                    self.initSortable();
+                    self.showStatus('saved', ecs64Data.i18n.saved);
+                    // Show success feedback on the saved category
+                    self.showSuccessFeedback(categoryId);
+                } else {
+                    self.showStatus('error', response.message || ecs64Data.i18n.error);
                 }
+            }).catch(error => {
+                const message = error.message || error.code || ecs64Data.i18n.error;
+                self.showStatus('error', message);
+            }).finally(() => {
+                self.isLoading = false;
+                self.setCategorySaving(categoryId, false);
             });
         },
 
