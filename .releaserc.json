@@ -14,7 +14,7 @@
         [
             "@semantic-release/exec",
             {
-                "prepareCmd": "sed -i '' 's/^Version: .*/Version: ${nextRelease.version}/' style.css || sed -i 's/^Version: .*/Version: ${nextRelease.version}/' style.css"
+                "prepareCmd": "sed -i '' 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php || sed -i 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php"
             }
         ],
         [
@@ -22,7 +22,7 @@
             {
                 "assets": [
                     "CHANGELOG.md",
-                    "style.css",
+                    "easy-categories-shift64.php",
                     "package.json",
                     "package-lock.json"
                 ],
