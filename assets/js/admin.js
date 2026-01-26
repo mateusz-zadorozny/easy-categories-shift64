@@ -274,26 +274,31 @@
          *
          * @param {jQuery} $item
          */
+        /**
+         * Handle sort stop event
+         *
+         * @param {jQuery} $item
+         */
         handleSortStop: function ($item) {
             const self = this;
             const categoryId = parseInt($item.data('id'), 10);
             const $parentList = $item.parent();
             const $parentItem = $parentList.closest('.ecs64-category-item');
             const newParentId = $parentItem.length ? parseInt($parentItem.data('id'), 10) : 0;
-            const newOrder = $item.index();
 
-            // Update all siblings order
+            // Build bulk update data for all siblings
             const orderData = [];
             $parentList.children('.ecs64-category-item').each(function (index) {
+                const id = parseInt($(this).data('id'), 10);
                 orderData.push({
-                    id: parseInt($(this).data('id'), 10),
+                    id: id,
                     parent: newParentId,
                     order: index
                 });
             });
 
-            // Just update the moved item
-            this.updateOrder(categoryId, 'set_parent', newOrder, newParentId);
+            // Use bulk update to ensure all siblings are correctly ordered
+            this.bulkUpdateOrder(orderData, categoryId);
         },
 
         /**
@@ -304,6 +309,56 @@
          */
         moveCategory: function (categoryId, action) {
             this.updateOrder(categoryId, action);
+        },
+
+        /**
+         * Bulk update category order
+         *
+         * @param {Array} items - Array of {id, parent, order}
+         * @param {number} triggeredId - ID of category that triggered the update (for highlighting)
+         */
+        bulkUpdateOrder: function (items, triggeredId = null) {
+            const self = this;
+
+            if (this.isLoading) return;
+            this.isLoading = true;
+
+            const updateId = triggeredId || (items.length > 0 ? items[0].id : null);
+
+            // Set visual loading state
+            if (updateId) {
+                this.setCategorySaving(updateId, true);
+            }
+            this.showStatus('saving', ecs64Data.i18n.saving);
+
+            wp.apiFetch({
+                path: 'ecs64/v1/bulk-order',
+                method: 'POST',
+                data: {
+                    items: items
+                }
+            }).then(response => {
+                if (response.success) {
+                    self.categories = response.categories;
+                    self.renderTree();
+                    self.initSortable();
+                    self.showStatus('saved', ecs64Data.i18n.saved);
+                    // Show success feedback
+                    if (updateId) {
+                        self.showSuccessFeedback(updateId);
+                    }
+                } else {
+                    self.showStatus('error', response.message || ecs64Data.i18n.error);
+                }
+            }).catch(error => {
+                const message = error.message || error.code || ecs64Data.i18n.error;
+                self.showStatus('error', message);
+            }).finally(() => {
+                self.isLoading = false;
+                if (updateId) {
+                    self.setCategorySaving(updateId, false);
+                }
+            });
         },
 
         /**

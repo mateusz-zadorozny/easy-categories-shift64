@@ -115,6 +115,41 @@ function ecs64_register_rest_routes(): void {
 
 	register_rest_route(
 		'ecs64/v1',
+		'/bulk-order',
+		array(
+			'methods'             => 'POST',
+			'callback'            => __NAMESPACE__ . '\\ecs64_handle_bulk_order',
+			'permission_callback' => function () {
+				return current_user_can( 'manage_woocommerce' );
+			},
+			'args'                => array(
+				'items' => array(
+					'required' => true,
+					'type'     => 'array',
+					'items'    => array(
+						'type'       => 'object',
+						'properties' => array(
+							'id'     => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'parent' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'order'  => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+						),
+					),
+				),
+			),
+		)
+	);
+
+	register_rest_route(
+		'ecs64/v1',
 		'/get-categories',
 		array(
 			'methods'             => 'GET',
@@ -130,6 +165,59 @@ function ecs64_register_rest_routes(): void {
 			),
 		)
 	);
+}
+
+/**
+ * Handle bulk update order REST request.
+ *
+ * @param \WP_REST_Request $request The REST request object.
+ * @return \WP_REST_Response The REST response.
+ */
+function ecs64_handle_bulk_order( \WP_REST_Request $request ): \WP_REST_Response {
+	$items = $request->get_param( 'items' );
+
+	if ( ! is_array( $items ) || empty( $items ) ) {
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => 'Invalid data',
+			),
+			400
+		);
+	}
+
+	$manager = new Category_Manager();
+
+	try {
+		$result = $manager->bulk_reorder( $items );
+
+		if ( $result ) {
+			return new \WP_REST_Response(
+				array(
+					'success'    => true,
+					'categories' => $manager->get_category_tree(),
+				),
+				200
+			);
+		}
+
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => 'Failed to update order',
+			),
+			500
+		);
+
+	} catch ( \Exception $e ) {
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => $e->getMessage(),
+			),
+			500
+		);
+	}
 }
 
 /**
