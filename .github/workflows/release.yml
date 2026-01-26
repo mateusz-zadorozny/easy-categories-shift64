@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for proper analysis
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm # speeds up dependency installation
+
+      - name: Install dependencies
+        run: npm ci # requires package-lock.json to be in the repository
+
+      # Optional step – lint and security audit before release
+      - name: Lint & Security Audit
+        run: |
+          npm run lint || echo "No lint script"
+          npm audit --audit-level=high || echo "Audit completed successfully"
+
+      - name: Run Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

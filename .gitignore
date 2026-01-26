@@ -11,3 +11,5 @@ vendor/
 .vscode/settings.json
 .ralph-tui/
 .claude/
+node_modules/
+vendor/

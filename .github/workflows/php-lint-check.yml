@@ -1,0 +1,52 @@
+name: PHP Lint Check
+
+on:
+  push:
+    branches: ["**"]      # wszystkie branche
+  pull_request:
+    branches: ["**"]      # wszystkie PR-y
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: none
+          coverage: none
+
+      - name: Lint PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Zbierz PHP pliki (z repo) i odpal lint.
+          # -l = lint, -n = bez php.ini (stabilniej na CI)
+          files="$(git ls-files '*.php')"
+
+          if [ -z "$files" ]; then
+            echo "No PHP files found."
+            exit 0
+          fi
+
+          # Lintuj po kolei, żeby w logu było widać konkretny plik.
+          failed=0
+          while IFS= read -r f; do
+            echo "Lint: $f"
+            php -n -l "$f" >/dev/null || failed=1
+          done <<< "$files"
+
+          if [ "$failed" -ne 0 ]; then
+            echo "PHP lint failed."
+            exit 1
+          fi
+
+          echo "PHP lint OK."
