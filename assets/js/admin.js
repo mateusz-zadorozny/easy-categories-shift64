@@ -69,6 +69,21 @@
 
                 self.moveCategory(categoryId, action);
             });
+
+            // Position buttons
+            $(document).on('click', '.ecs64-position-btn', function (e) {
+                e.preventDefault();
+                if ($(this).prop('disabled') || self.isLoading) return;
+
+                const $item = $(this).closest('.ecs64-category-item');
+                const categoryId = parseInt($item.data('id'), 10);
+                const position = $(this).data('position');
+
+                // Convert 'none' to empty string for the API
+                const positionValue = position === 'none' ? '' : position;
+
+                self.setPosition(categoryId, positionValue);
+            });
         },
 
         /**
@@ -268,6 +283,51 @@
          */
         moveCategory: function (categoryId, action) {
             this.updateOrder(categoryId, action);
+        },
+
+        /**
+         * Set category position via AJAX
+         *
+         * @param {number} categoryId
+         * @param {string} position - 'left', 'right', or '' (empty string)
+         */
+        setPosition: function (categoryId, position) {
+            const self = this;
+
+            if (this.isLoading) return;
+            this.isLoading = true;
+
+            this.showStatus('saving', ecs64Data.i18n.saving);
+
+            $.ajax({
+                url: ecs64Data.restUrl + 'update-order',
+                method: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-WP-Nonce', ecs64Data.nonce);
+                },
+                data: {
+                    category_id: categoryId,
+                    action: 'set_position',
+                    position: position
+                },
+                success: function (response) {
+                    if (response.success) {
+                        self.categories = response.categories;
+                        self.renderTree();
+                        self.initSortable();
+                        self.showStatus('saved', ecs64Data.i18n.saved);
+                    } else {
+                        self.showStatus('error', response.message || ecs64Data.i18n.error);
+                    }
+                },
+                error: function (xhr) {
+                    const message = xhr.responseJSON?.message || ecs64Data.i18n.error;
+                    self.showStatus('error', message);
+                },
+                complete: function () {
+                    self.isLoading = false;
+                }
+            });
         },
 
         /**

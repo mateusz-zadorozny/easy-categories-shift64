@@ -93,7 +93,12 @@ function ecs64_register_rest_routes(): void {
 				'action'      => array(
 					'required'          => true,
 					'type'              => 'string',
-					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent' ),
+					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent', 'set_position' ),
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+				'position'    => array(
+					'type'              => 'string',
+					'enum'              => array( 'left', 'right', '' ),
 					'sanitize_callback' => 'sanitize_text_field',
 				),
 				'new_order'   => array(
@@ -138,6 +143,7 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 	$action      = $request->get_param( 'action' );
 	$new_order   = $request->get_param( 'new_order' );
 	$new_parent  = $request->get_param( 'new_parent' );
+	$position    = $request->get_param( 'position' );
 
 	$manager = new Category_Manager();
 
@@ -160,6 +166,9 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 				break;
 			case 'set_parent':
 				$result = $manager->set_category_parent( $category_id, $new_parent ?? 0 );
+				break;
+			case 'set_position':
+				$result = $manager->set_category_position( $category_id, $position ?? '' );
 				break;
 			default:
 				return new \WP_REST_Response(
