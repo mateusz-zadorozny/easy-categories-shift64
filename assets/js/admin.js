@@ -10,6 +10,7 @@
         childlessIds: [],
         isLoading: false,
         parentOnlyMode: false,
+        savingCategoryId: null,
 
         /**
          * Initialize the plugin
@@ -62,10 +63,13 @@
             $(document).on('click', '.ecs64-move-btn', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if ($(this).prop('disabled') || self.isLoading) return;
 
                 const $item = $(this).closest('.ecs64-category-item');
                 const categoryId = parseInt($item.data('id'), 10);
+
+                // Check if disabled or if this category is currently saving
+                if ($(this).prop('disabled') || self.isLoading || self.isCategorySaving(categoryId)) return;
+
                 const action = $(this).data('action');
 
                 self.moveCategory(categoryId, action);
@@ -75,10 +79,13 @@
             $(document).on('click', '.ecs64-position-btn', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if ($(this).prop('disabled') || self.isLoading) return;
 
                 const $item = $(this).closest('.ecs64-category-item');
                 const categoryId = parseInt($item.data('id'), 10);
+
+                // Check if disabled or if this category is currently saving
+                if ($(this).prop('disabled') || self.isLoading || self.isCategorySaving(categoryId)) return;
+
                 const position = $(this).data('position');
 
                 // Convert 'none' to empty string for the API
@@ -299,6 +306,8 @@
             if (this.isLoading) return;
             this.isLoading = true;
 
+            // Set visual loading state for this category
+            this.setCategorySaving(categoryId, true);
             this.showStatus('saving', ecs64Data.i18n.saving);
 
             $.ajax({
@@ -318,6 +327,8 @@
                         self.renderTree();
                         self.initSortable();
                         self.showStatus('saved', ecs64Data.i18n.saved);
+                        // Show success feedback on the saved category
+                        self.showSuccessFeedback(categoryId);
                     } else {
                         self.showStatus('error', response.message || ecs64Data.i18n.error);
                     }
@@ -328,6 +339,7 @@
                 },
                 complete: function () {
                     self.isLoading = false;
+                    self.setCategorySaving(categoryId, false);
                 }
             });
         },
@@ -346,6 +358,8 @@
             if (this.isLoading) return;
             this.isLoading = true;
 
+            // Set visual loading state for this category
+            this.setCategorySaving(categoryId, true);
             this.showStatus('saving', ecs64Data.i18n.saving);
 
             const data = {
@@ -374,6 +388,8 @@
                         self.renderTree();
                         self.initSortable();
                         self.showStatus('saved', ecs64Data.i18n.saved);
+                        // Show success feedback on the saved category
+                        self.showSuccessFeedback(categoryId);
                     } else {
                         self.showStatus('error', response.message || ecs64Data.i18n.error);
                     }
@@ -384,8 +400,56 @@
                 },
                 complete: function () {
                     self.isLoading = false;
+                    self.setCategorySaving(categoryId, false);
                 }
             });
+        },
+
+        /**
+         * Check if a category is currently saving
+         *
+         * @param {number} categoryId
+         * @returns {boolean}
+         */
+        isCategorySaving: function (categoryId) {
+            return this.savingCategoryId === categoryId;
+        },
+
+        /**
+         * Set category saving state with visual feedback
+         *
+         * @param {number} categoryId
+         * @param {boolean} isSaving
+         */
+        setCategorySaving: function (categoryId, isSaving) {
+            const $item = $('.ecs64-category-item[data-id="' + categoryId + '"]');
+            const $row = $item.find('> .ecs64-category-row');
+
+            if (isSaving) {
+                this.savingCategoryId = categoryId;
+                $row.addClass('ecs64-saving');
+                // Disable all buttons in this row
+                $row.find('.ecs64-move-btn, .ecs64-position-btn').prop('disabled', true);
+            } else {
+                this.savingCategoryId = null;
+                $row.removeClass('ecs64-saving');
+                // Re-enable buttons (renderTree will handle proper disabled states)
+            }
+        },
+
+        /**
+         * Show success feedback on category row
+         *
+         * @param {number} categoryId
+         */
+        showSuccessFeedback: function (categoryId) {
+            const $item = $('.ecs64-category-item[data-id="' + categoryId + '"]');
+            const $row = $item.find('> .ecs64-category-row');
+
+            $row.addClass('ecs64-save-success');
+            setTimeout(function () {
+                $row.removeClass('ecs64-save-success');
+            }, 1000);
         },
 
         /**
@@ -408,6 +472,51 @@
                     $status.removeClass('visible');
                 }, 2000);
             }
+
+            // For errors, show toast notification
+            if (type === 'error') {
+                this.showToast(message, 'error');
+            }
+        },
+
+        /**
+         * Show toast notification
+         *
+         * @param {string} message
+         * @param {string} type - 'success', 'error'
+         */
+        showToast: function (message, type) {
+            // Remove any existing toast
+            $('.ecs64-toast').remove();
+
+            const $toast = $('<div class="ecs64-toast ecs64-toast-' + type + '">' +
+                '<span class="ecs64-toast-message">' + this.escapeHtml(message) + '</span>' +
+                '<button type="button" class="ecs64-toast-close">&times;</button>' +
+                '</div>');
+
+            $('body').append($toast);
+
+            // Trigger animation
+            setTimeout(function () {
+                $toast.addClass('visible');
+            }, 10);
+
+            // Auto dismiss after 5 seconds for errors
+            const dismissTimeout = setTimeout(function () {
+                $toast.removeClass('visible');
+                setTimeout(function () {
+                    $toast.remove();
+                }, 300);
+            }, 5000);
+
+            // Close button handler
+            $toast.find('.ecs64-toast-close').on('click', function () {
+                clearTimeout(dismissTimeout);
+                $toast.removeClass('visible');
+                setTimeout(function () {
+                    $toast.remove();
+                }, 300);
+            });
         },
 
         /**

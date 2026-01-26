@@ -292,6 +292,105 @@
     border-color: #135e96;
 }
 
+/* Saving state - loading feedback */
+.ecs64-category-row.ecs64-saving {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.ecs64-category-row.ecs64-saving::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid #c3c4c7;
+    border-top-color: #2271b1;
+    border-radius: 50%;
+    animation: ecs64-spin 0.8s linear infinite;
+}
+
+@keyframes ecs64-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Success feedback - flash green */
+.ecs64-category-row.ecs64-save-success {
+    animation: ecs64-success-flash 1s ease-out;
+}
+
+@keyframes ecs64-success-flash {
+    0% {
+        background-color: #d4edda;
+    }
+    100% {
+        background-color: #fff;
+    }
+}
+
+/* Toast notification */
+.ecs64-toast {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    max-width: 400px;
+    padding: 12px 40px 12px 16px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100001;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ecs64-toast.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.ecs64-toast-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.ecs64-toast-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.ecs64-toast-message {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.ecs64-toast-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+}
+
+.ecs64-toast-close:hover {
+    opacity: 1;
+}
+
 /* Sortable states */
 .ecs64-category-item.ui-sortable-helper {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
