@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.1...v1.1.2) (2026-01-27)
+
+
+### Bug Fixes
+
+* build release ZIP with correct plugin directory name ([b14000c](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/b14000c3c35e988f5019139507a1950e1fc21649))
+
 ## [1.1.1](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.0...v1.1.1) (2026-01-27)
 
 
