@@ -14,7 +14,8 @@
         [
             "@semantic-release/exec",
             {
-                "prepareCmd": "sed -i '' 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php || sed -i 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php"
+                "prepareCmd": "sed -i '' 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php || sed -i 's/^ \\* Version: .*/ * Version:         ${nextRelease.version}/' easy-categories-shift64.php",
+                "publishCmd": "bash build-zip.sh ${nextRelease.version}"
             }
         ],
         [
@@ -29,6 +30,16 @@
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
         ],
-        "@semantic-release/github"
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "path": "easy-categories-shift64.zip",
+                        "label": "easy-categories-shift64-${nextRelease.version}.zip"
+                    }
+                ]
+            }
+        ]
     ]
 }

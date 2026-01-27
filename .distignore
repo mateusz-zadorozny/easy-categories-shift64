@@ -38,6 +38,8 @@ yarn.lock
 tests
 vendor
 node_modules
+.releaserc.json
+build-zip.sh
 *.sql
 *.tar.gz
 *.zip
