@@ -39,9 +39,6 @@ class Category_Manager {
 			array(
 				'taxonomy'   => self::TAXONOMY,
 				'hide_empty' => false,
-				'orderby'    => 'meta_value_num',
-				'meta_key'   => 'order',
-				'order'      => 'ASC',
 			)
 		);
 
@@ -64,9 +61,6 @@ class Category_Manager {
 				'taxonomy'   => self::TAXONOMY,
 				'hide_empty' => false,
 				'parent'     => 0,
-				'orderby'    => 'meta_value_num',
-				'meta_key'   => 'order',
-				'order'      => 'ASC',
 			)
 		);
 
@@ -74,7 +68,11 @@ class Category_Manager {
 			return array();
 		}
 
-		return array_map( array( $this, 'format_category' ), $categories );
+		$formatted = array_map( array( $this, 'format_category' ), $categories );
+
+		usort( $formatted, fn( $a, $b ) => $a['order'] <=> $b['order'] );
+
+		return $formatted;
 	}
 
 	/**
@@ -414,9 +412,6 @@ class Category_Manager {
 				'taxonomy'   => self::TAXONOMY,
 				'hide_empty' => false,
 				'parent'     => $parent_id,
-				'orderby'    => 'meta_value_num',
-				'meta_key'   => 'order',
-				'order'      => 'ASC',
 			)
 		);
 
@@ -424,7 +419,7 @@ class Category_Manager {
 			return array();
 		}
 
-		return array_map(
+		$siblings = array_map(
 			function ( $term ) {
 				return array(
 					'id'    => $term->term_id,
@@ -433,6 +428,10 @@ class Category_Manager {
 			},
 			$terms
 		);
+
+		usort( $siblings, fn( $a, $b ) => $a['order'] <=> $b['order'] );
+
+		return $siblings;
 	}
 
 	/**
