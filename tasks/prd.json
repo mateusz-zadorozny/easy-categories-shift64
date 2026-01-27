@@ -1,0 +1,94 @@
+{
+  "name": "Mega Menu Column Position Controls",
+  "branchName": "feature/mega-menu-column-position-controls",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add position buttons next to categories",
+      "description": "As a user, I want to see L | R | - buttons next to each category in the tree view so that I can quickly identify and change mega menu column positions.",
+      "acceptanceCriteria": [
+        "Each category in the tree has a group of three buttons: L (left), R (right), - (not set)",
+        "Buttons are visible next to category name without interfering with drag & drop",
+        "Buttons have tooltips explaining their function (Left column, Right column, Not set)",
+        "Buttons are small enough not to dominate the interface"
+      ],
+      "priority": 1,
+      "passes": true,
+      "dependsOn": [],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-002",
+      "title": "Visual highlighting of active position",
+      "description": "As a user, I want to see which position is currently active for each category so that I can quickly scan the current mega menu configuration.",
+      "acceptanceCriteria": [
+        "Active button is highlighted with color (e.g., blue/green background)",
+        "Inactive buttons have neutral style (gray/outline)",
+        "Button state reflects actual database value on page load",
+        "Categories without set value have the '-' button highlighted"
+      ],
+      "priority": 2,
+      "passes": true,
+      "dependsOn": [
+        "US-001"
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-003",
+      "title": "Save position via AJAX",
+      "description": "As a user, I want changes to be saved immediately when I click a position button so that I don't have to manually save after each change.",
+      "acceptanceCriteria": [
+        "Clicking a button sends AJAX request to save the new value",
+        "Value is saved as term meta 'merida_mega_menu_column_position'",
+        "Available values: 'left', 'right', '' (empty string for not set)",
+        "AJAX request is secured with nonce",
+        "Only users with appropriate permissions can change values"
+      ],
+      "priority": 1,
+      "passes": true,
+      "dependsOn": [
+        "US-001"
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-004",
+      "title": "Visual feedback during save",
+      "description": "As a user, I want to see visual feedback when saving so that I know my change was successful.",
+      "acceptanceCriteria": [
+        "During save, button shows loading state (spinner or opacity change)",
+        "After successful save, button changes to active state",
+        "On error, an error message is displayed (e.g., toast notification)",
+        "UI is blocked for the category during ongoing save (prevent double-click)"
+      ],
+      "priority": 3,
+      "passes": true,
+      "dependsOn": [
+        "US-003"
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-005",
+      "title": "Integration with existing category view",
+      "description": "As a user, I want the position controls to be seamlessly integrated into the existing category tree view so that the interface remains consistent and intuitive.",
+      "acceptanceCriteria": [
+        "Buttons are added to existing category template in the tree",
+        "Styling is consistent with the rest of the plugin interface",
+        "Buttons do not affect drag & drop sorting functionality",
+        "View works correctly on different screen widths (responsiveness)"
+      ],
+      "priority": 2,
+      "passes": true,
+      "dependsOn": [
+        "US-001",
+        "US-002"
+      ],
+      "completionNotes": "Completed by agent"
+    }
+  ],
+  "metadata": {
+    "updatedAt": "2026-01-26T15:20:07.020Z"
+  }
+}

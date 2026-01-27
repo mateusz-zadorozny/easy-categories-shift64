@@ -93,7 +93,12 @@ function ecs64_register_rest_routes(): void {
 				'action'      => array(
 					'required'          => true,
 					'type'              => 'string',
-					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent' ),
+					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent', 'set_position' ),
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+				'position'    => array(
+					'type'              => 'string',
+					'enum'              => array( 'left', 'right', '' ),
 					'sanitize_callback' => 'sanitize_text_field',
 				),
 				'new_order'   => array(
@@ -103,6 +108,41 @@ function ecs64_register_rest_routes(): void {
 				'new_parent'  => array(
 					'type'              => 'integer',
 					'sanitize_callback' => 'absint',
+				),
+			),
+		)
+	);
+
+	register_rest_route(
+		'ecs64/v1',
+		'/bulk-order',
+		array(
+			'methods'             => 'POST',
+			'callback'            => __NAMESPACE__ . '\\ecs64_handle_bulk_order',
+			'permission_callback' => function () {
+				return current_user_can( 'manage_woocommerce' );
+			},
+			'args'                => array(
+				'items' => array(
+					'required' => true,
+					'type'     => 'array',
+					'items'    => array(
+						'type'       => 'object',
+						'properties' => array(
+							'id'     => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'parent' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'order'  => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+						),
+					),
 				),
 			),
 		)
@@ -128,6 +168,59 @@ function ecs64_register_rest_routes(): void {
 }
 
 /**
+ * Handle bulk update order REST request.
+ *
+ * @param \WP_REST_Request $request The REST request object.
+ * @return \WP_REST_Response The REST response.
+ */
+function ecs64_handle_bulk_order( \WP_REST_Request $request ): \WP_REST_Response {
+	$items = $request->get_param( 'items' );
+
+	if ( ! is_array( $items ) || empty( $items ) ) {
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => 'Invalid data',
+			),
+			400
+		);
+	}
+
+	$manager = new Category_Manager();
+
+	try {
+		$result = $manager->bulk_reorder( $items );
+
+		if ( $result ) {
+			return new \WP_REST_Response(
+				array(
+					'success'    => true,
+					'categories' => $manager->get_category_tree(),
+				),
+				200
+			);
+		}
+
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => 'Failed to update order',
+			),
+			500
+		);
+
+	} catch ( \Exception $e ) {
+		return new \WP_REST_Response(
+			array(
+				'success' => false,
+				'message' => $e->getMessage(),
+			),
+			500
+		);
+	}
+}
+
+/**
  * Handle update order REST request.
  *
  * @param \WP_REST_Request $request The REST request object.
@@ -138,6 +231,7 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 	$action      = $request->get_param( 'action' );
 	$new_order   = $request->get_param( 'new_order' );
 	$new_parent  = $request->get_param( 'new_parent' );
+	$position    = $request->get_param( 'position' );
 
 	$manager = new Category_Manager();
 
@@ -160,6 +254,9 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 				break;
 			case 'set_parent':
 				$result = $manager->set_category_parent( $category_id, $new_parent ?? 0 );
+				break;
+			case 'set_position':
+				$result = $manager->set_category_position( $category_id, $position ?? '' );
 				break;
 			default:
 				return new \WP_REST_Response(

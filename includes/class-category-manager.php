@@ -25,6 +25,11 @@ class Category_Manager {
 	private const TAXONOMY = 'product_cat';
 
 	/**
+	 * Meta key for mega menu column position.
+	 */
+	private const POSITION_META_KEY = 'merida_mega_menu_column_position';
+
+	/**
 	 * Get full category tree with hierarchy.
 	 *
 	 * @return array Category tree.
@@ -130,6 +135,7 @@ class Category_Manager {
 					'parent'       => $category->parent,
 					'count'        => $category->count,
 					'order'        => (int) get_term_meta( $category->term_id, 'order', true ),
+					'position'     => $this->get_category_position( $category->term_id ),
 					'has_children' => ! empty( $children ),
 					'is_childless' => in_array( $category->term_id, $childless_ids, true ),
 					'children'     => $children,
@@ -316,6 +322,45 @@ class Category_Manager {
 	public function set_category_order( int $category_id, int $new_order ): bool {
 		$result = update_term_meta( $category_id, 'order', $new_order );
 		return false !== $result;
+	}
+
+	/**
+	 * Set category mega menu column position.
+	 *
+	 * @param int    $category_id Category ID.
+	 * @param string $position    Position value ('left', 'right', or '' for not set).
+	 * @return bool Success status.
+	 */
+	public function set_category_position( int $category_id, string $position ): bool {
+		$category = get_term( $category_id, self::TAXONOMY );
+		if ( ! $category || is_wp_error( $category ) ) {
+			return false;
+		}
+
+		// Validate position value.
+		if ( ! in_array( $position, array( 'left', 'right', '' ), true ) ) {
+			return false;
+		}
+
+		// Delete meta if empty, otherwise update.
+		if ( '' === $position ) {
+			delete_term_meta( $category_id, self::POSITION_META_KEY );
+		} else {
+			update_term_meta( $category_id, self::POSITION_META_KEY, $position );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get category mega menu column position.
+	 *
+	 * @param int $category_id Category ID.
+	 * @return string Position value ('left', 'right', or '' for not set).
+	 */
+	public function get_category_position( int $category_id ): string {
+		$position = get_term_meta( $category_id, self::POSITION_META_KEY, true );
+		return is_string( $position ) ? $position : '';
 	}
 
 	/**
