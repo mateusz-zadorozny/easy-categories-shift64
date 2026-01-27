@@ -6,7 +6,7 @@
  * Author URI:      https://shift64.com
  * Text Domain:     easy-categories-shift64
  * Domain Path:     /languages
- * Version:         1.1.2
+ * Version:         1.1.3
  * Requires PHP:    8.0
  * Requires at least: 6.8
  * WC requires at least: 10.0

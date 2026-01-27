@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.2...v1.1.3) (2026-01-27)
+
+
+### Bug Fixes
+
+* show all categories regardless of missing order meta ([#3](https://github.com/mateusz-zadorozny/easy-categories-shift64/issues/3)) ([1518edc](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/1518edc17fd50d397e588fd718430bb6dbb02a39))
+
 ## [1.1.2](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.1...v1.1.2) (2026-01-27)
 
 
