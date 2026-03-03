@@ -12,6 +12,7 @@
  * WC requires at least: 10.0
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
+ * GitHub Plugin URI: mateusz-zadorozny/easy-categories-shift64
  *
  * @package Easy_Categories_Shift64
  */
