@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.2.0...v1.3.0) (2026-03-03)
+
+
+### Features
+
+* add GitHub Plugin URI header for Git Updater support ([08353cc](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/08353cc2d2277d9cd7842eea0c584ba386de4c84))
+
 # [1.2.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.3...v1.2.0) (2026-03-03)
 
 
