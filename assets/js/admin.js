@@ -10,6 +10,7 @@
         childlessIds: [],
         isLoading: false,
         parentOnlyMode: false,
+        showThumbnails: false,
         savingCategoryId: null,
 
         /**
@@ -59,6 +60,13 @@
                 } else {
                     $tree.removeClass('ecs64-highlight-childless');
                 }
+            });
+
+            // Thumbnails toggle
+            $('#ecs64-show-thumbnails').on('change', function () {
+                self.showThumbnails = $(this).is(':checked');
+                self.renderTree();
+                self.initSortable();
             });
 
             // Set default state
@@ -132,9 +140,19 @@
                 const childlessClass = cat.is_childless ? ' ecs64-no-children' : '';
                 const depthDashes = this.getDepthIndicator(depth);
 
-                // Position buttons only for depth 1 (first level subcategories)
+                // Thumbnail HTML
+                let thumbnailHTML = '';
+                if (this.showThumbnails) {
+                    if (cat.thumbnail_url) {
+                        thumbnailHTML = `<img class="ecs64-category-thumbnail" src="${this.escapeHtml(cat.thumbnail_url)}" alt="" width="32" height="32" />`;
+                    } else {
+                        thumbnailHTML = '<span class="dashicons dashicons-format-image ecs64-no-thumbnail"></span>';
+                    }
+                }
+
+                // Position buttons only for depth 1 (first level subcategories) and only when enabled
                 let positionButtons = '';
-                if (depth === 1) {
+                if (depth === 1 && ecs64Data.enableMegaMenuPosition) {
                     positionButtons = `
                             <div class="ecs64-position-buttons">
                                 <button type="button"
@@ -162,6 +180,7 @@
                             
                             <div class="ecs64-category-info">
                                 ${depthDashes}
+                                ${thumbnailHTML}
                                 <span class="ecs64-category-name">${this.escapeHtml(cat.name)}</span>
                                 <span class="ecs64-category-id">(ID: ${cat.id})</span>
                                 <span class="ecs64-category-count">${cat.count} ${ecs64Data.i18n.products}</span>
