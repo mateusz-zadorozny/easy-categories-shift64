@@ -100,3 +100,39 @@ msgstr "Move category up or down within the same level"
 #: includes/class-admin-page.php
 msgid "Zmień poziom hierarchii (lewo = wyższy poziom, prawo = podkategoria poprzedniej)"
 msgstr "Change hierarchy level (left = higher level, right = subcategory of previous)"
+
+#: includes/class-admin-page.php
+msgid "Pokaż miniatury kategorii"
+msgstr "Show category thumbnails"
+
+#: includes/class-admin-page.php
+msgid "Lewa kolumna"
+msgstr "Left column"
+
+#: includes/class-admin-page.php
+msgid "Prawa kolumna"
+msgstr "Right column"
+
+#: includes/class-admin-page.php
+msgid "Nie ustawiono"
+msgstr "Not set"
+
+#: includes/class-admin-page.php
+msgid "Rozszerzenia motywu"
+msgstr "Theme extensions"
+
+#: includes/class-admin-page.php
+msgid "Ustawienia zapisane."
+msgstr "Settings saved."
+
+#: includes/class-admin-page.php
+msgid "Pozycja kolumny w mega menu (L/R)"
+msgstr "Mega menu column position (L/R)"
+
+#: includes/class-admin-page.php
+msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
+msgstr "Adds left/right column buttons for first-level subcategories. Enable if your theme uses a mega menu with two-column layout."
+
+#: includes/class-admin-page.php
+msgid "Zapisz ustawienia"
+msgstr "Save settings"

@@ -97,3 +97,39 @@ msgstr ""
 #: includes/class-admin-page.php
 msgid "Zmień poziom hierarchii (lewo = wyższy poziom, prawo = podkategoria poprzedniej)"
 msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Pokaż miniatury kategorii"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Lewa kolumna"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Prawa kolumna"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Nie ustawiono"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Rozszerzenia motywu"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Ustawienia zapisane."
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Pozycja kolumny w mega menu (L/R)"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Zapisz ustawienia"
+msgstr ""
