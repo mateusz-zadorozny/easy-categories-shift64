@@ -213,6 +213,27 @@
     border-radius: 10px;
 }
 
+/* Category thumbnail */
+.ecs64-category-thumbnail {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid #e2e4e7;
+}
+
+/* Thumbnail placeholder */
+.ecs64-no-thumbnail {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+    color: #c3c4c7;
+    flex-shrink: 0;
+}
+
 /* Move buttons */
 .ecs64-move-buttons {
     display: flex;
@@ -448,6 +469,45 @@
     margin-bottom: 5px;
     font-size: 13px;
     color: #50575e;
+}
+
+/* Settings section */
+.ecs64-settings {
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+
+.ecs64-settings h3 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #1d2327;
+}
+
+.ecs64-setting-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.ecs64-setting-row input[type="checkbox"] {
+    margin: 0;
+}
+
+.ecs64-settings .description {
+    margin: 6px 0 0 0;
+    color: #646970;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.ecs64-settings .notice {
+    margin: 0 0 12px 0;
 }
 
 /* Parent only mode */

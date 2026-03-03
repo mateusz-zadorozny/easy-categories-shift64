@@ -256,6 +256,15 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 				$result = $manager->set_category_parent( $category_id, $new_parent ?? 0 );
 				break;
 			case 'set_position':
+				if ( get_option( 'ecs64_enable_mega_menu_position', '0' ) !== '1' ) {
+					return new \WP_REST_Response(
+						array(
+							'success' => false,
+							'message' => 'Mega menu position feature is disabled',
+						),
+						403
+					);
+				}
 				$result = $manager->set_category_position( $category_id, $position ?? '' );
 				break;
 			default:

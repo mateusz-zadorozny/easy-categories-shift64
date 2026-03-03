@@ -127,16 +127,17 @@ class Category_Manager {
 				$children = $this->build_tree( $categories, $category->term_id );
 
 				$tree[] = array(
-					'id'           => $category->term_id,
-					'name'         => $category->name,
-					'slug'         => $category->slug,
-					'parent'       => $category->parent,
-					'count'        => $category->count,
-					'order'        => (int) get_term_meta( $category->term_id, 'order', true ),
-					'position'     => $this->get_category_position( $category->term_id ),
-					'has_children' => ! empty( $children ),
-					'is_childless' => in_array( $category->term_id, $childless_ids, true ),
-					'children'     => $children,
+					'id'            => $category->term_id,
+					'name'          => $category->name,
+					'slug'          => $category->slug,
+					'parent'        => $category->parent,
+					'count'         => $category->count,
+					'order'         => (int) get_term_meta( $category->term_id, 'order', true ),
+					'position'      => $this->get_category_position( $category->term_id ),
+					'thumbnail_url' => $this->get_category_thumbnail_url( $category->term_id ),
+					'has_children'  => ! empty( $children ),
+					'is_childless'  => in_array( $category->term_id, $childless_ids, true ),
+					'children'      => $children,
 				);
 			}
 		}
@@ -157,15 +158,16 @@ class Category_Manager {
 		$childless_ids = $this->get_categories_without_children();
 
 		return array(
-			'id'           => $category->term_id,
-			'name'         => $category->name,
-			'slug'         => $category->slug,
-			'parent'       => $category->parent,
-			'count'        => $category->count,
-			'order'        => (int) get_term_meta( $category->term_id, 'order', true ),
-			'is_childless' => in_array( $category->term_id, $childless_ids, true ),
-			'has_children' => false,
-			'children'     => array(),
+			'id'            => $category->term_id,
+			'name'          => $category->name,
+			'slug'          => $category->slug,
+			'parent'        => $category->parent,
+			'count'         => $category->count,
+			'order'         => (int) get_term_meta( $category->term_id, 'order', true ),
+			'thumbnail_url' => $this->get_category_thumbnail_url( $category->term_id ),
+			'is_childless'  => in_array( $category->term_id, $childless_ids, true ),
+			'has_children'  => false,
+			'children'      => array(),
 		);
 	}
 
@@ -359,6 +361,24 @@ class Category_Manager {
 	public function get_category_position( int $category_id ): string {
 		$position = get_term_meta( $category_id, self::POSITION_META_KEY, true );
 		return is_string( $position ) ? $position : '';
+	}
+
+	/**
+	 * Get category thumbnail URL.
+	 *
+	 * @param int $category_id Category ID.
+	 * @return string Thumbnail URL or empty string.
+	 */
+	private function get_category_thumbnail_url( int $category_id ): string {
+		$thumbnail_id = (int) get_term_meta( $category_id, 'thumbnail_id', true );
+
+		if ( ! $thumbnail_id ) {
+			return '';
+		}
+
+		$url = wp_get_attachment_image_url( $thumbnail_id, 'thumbnail' );
+
+		return $url ? $url : '';
 	}
 
 	/**

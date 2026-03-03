@@ -25,6 +25,30 @@ class Admin_Page {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'admin_init', array( $this, 'handle_settings_save' ) );
+	}
+
+	/**
+	 * Handle settings form submission.
+	 */
+	public function handle_settings_save(): void {
+		if ( ! isset( $_POST['ecs64_settings_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ecs64_settings_nonce'] ) ), 'ecs64_save_settings' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		$enable_mega_menu = isset( $_POST['ecs64_enable_mega_menu_position'] ) ? '1' : '0';
+		update_option( 'ecs64_enable_mega_menu_position', $enable_mega_menu );
+
+		wp_safe_redirect( add_query_arg( 'settings-updated', 'true', wp_get_referer() ) );
+		exit;
 	}
 
 	/**
@@ -78,11 +102,12 @@ class Admin_Page {
 			'ecs64-admin',
 			'ecs64Data',
 			array(
-				'restUrl'      => rest_url( 'ecs64/v1/' ),
-				'nonce'        => wp_create_nonce( 'wp_rest' ),
-				'categories'   => $manager->get_category_tree(),
-				'childlessIds' => $manager->get_categories_without_children(),
-				'i18n'         => array(
+				'restUrl'                  => rest_url( 'ecs64/v1/' ),
+				'nonce'                    => wp_create_nonce( 'wp_rest' ),
+				'categories'               => $manager->get_category_tree(),
+				'childlessIds'             => $manager->get_categories_without_children(),
+				'enableMegaMenuPosition'   => get_option( 'ecs64_enable_mega_menu_position', '0' ) === '1',
+				'i18n'                     => array(
 					'loading'       => __( 'Ładowanie...', 'easy-categories-shift64' ),
 					'saving'        => __( 'Zapisywanie...', 'easy-categories-shift64' ),
 					'saved'         => __( 'Zapisano!', 'easy-categories-shift64' ),
@@ -118,6 +143,10 @@ class Admin_Page {
 						<input type="checkbox" id="ecs64-highlight-childless" checked />
 						<?php esc_html_e( 'Wyróżnij kategorie główne bez podkategorii', 'easy-categories-shift64' ); ?>
 					</label>
+					<label class="ecs64-filter">
+						<input type="checkbox" id="ecs64-show-thumbnails" />
+						<?php esc_html_e( 'Pokaż miniatury kategorii', 'easy-categories-shift64' ); ?>
+					</label>
 				</div>
 
 				<div class="ecs64-legend">
@@ -146,6 +175,22 @@ class Admin_Page {
 					<li><strong>▲ ▼</strong> - <?php esc_html_e( 'Przesuń kategorię w górę lub w dół w obrębie poziomu', 'easy-categories-shift64' ); ?></li>
 					<li><strong>◀ ▶</strong> - <?php esc_html_e( 'Zmień poziom hierarchii (lewo = wyższy poziom, prawo = podkategoria poprzedniej)', 'easy-categories-shift64' ); ?></li>
 				</ul>
+			</div>
+
+			<div class="ecs64-settings">
+				<h3><?php esc_html_e( 'Rozszerzenia motywu', 'easy-categories-shift64' ); ?></h3>
+				<?php if ( isset( $_GET['settings-updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+					<div class="notice notice-success inline"><p><?php esc_html_e( 'Ustawienia zapisane.', 'easy-categories-shift64' ); ?></p></div>
+				<?php endif; ?>
+				<form method="post">
+					<?php wp_nonce_field( 'ecs64_save_settings', 'ecs64_settings_nonce' ); ?>
+					<label class="ecs64-setting-row">
+						<input type="checkbox" name="ecs64_enable_mega_menu_position" value="1" <?php checked( get_option( 'ecs64_enable_mega_menu_position', '0' ), '1' ); ?> />
+						<?php esc_html_e( 'Pozycja kolumny w mega menu (L/R)', 'easy-categories-shift64' ); ?>
+					</label>
+					<p class="description"><?php esc_html_e( 'Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem.', 'easy-categories-shift64' ); ?></p>
+					<?php submit_button( __( 'Zapisz ustawienia', 'easy-categories-shift64' ), 'secondary' ); ?>
+				</form>
 			</div>
 		</div>
 		<?php
