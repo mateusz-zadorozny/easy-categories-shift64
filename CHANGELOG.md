@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.3...v1.2.0) (2026-03-03)
+
+
+### Features
+
+* category thumbnails toggle & theme-specific mega menu settings ([#4](https://github.com/mateusz-zadorozny/easy-categories-shift64/issues/4)) ([505d7b0](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/505d7b0c80a146576279ef473660fb1ba704737c))
+
 ## [1.1.3](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.1.2...v1.1.3) (2026-01-27)
 
 
