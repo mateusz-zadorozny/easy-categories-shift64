@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.3.0...v1.4.0) (2026-03-04)
+
+
+### Features
+
+* clickable thumbnails & category icons for root categories ([#5](https://github.com/mateusz-zadorozny/easy-categories-shift64/issues/5)) ([c9dca8b](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/c9dca8b5d63f5da9a95ed94a38209d931fcf52b0))
+
 # [1.3.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.2.0...v1.3.0) (2026-03-03)
 
 
