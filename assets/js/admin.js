@@ -88,6 +88,22 @@
                 self.moveCategory(categoryId, action);
             });
 
+            // Thumbnail/icon click - open Media Library
+            $(document).on('click', '.ecs64-thumbnail-wrapper', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (self.isLoading) return;
+
+                const $wrapper = $(this);
+                const categoryId = parseInt($wrapper.data('category-id'), 10);
+                const type = $wrapper.data('type'); // 'thumbnail' or 'icon'
+
+                if (self.isCategorySaving(categoryId)) return;
+
+                self.openMediaPicker(categoryId, type);
+            });
+
             // Position buttons
             $(document).on('click', '.ecs64-position-btn', function (e) {
                 e.preventDefault();
@@ -140,13 +156,23 @@
                 const childlessClass = cat.is_childless ? ' ecs64-no-children' : '';
                 const depthDashes = this.getDepthIndicator(depth);
 
-                // Thumbnail HTML
+                // Thumbnail HTML (clickable to set/change)
                 let thumbnailHTML = '';
                 if (this.showThumbnails) {
                     if (cat.thumbnail_url) {
-                        thumbnailHTML = `<img class="ecs64-category-thumbnail" src="${this.escapeHtml(cat.thumbnail_url)}" alt="" width="32" height="32" />`;
+                        thumbnailHTML = `<span class="ecs64-thumbnail-wrapper" data-category-id="${cat.id}" data-type="thumbnail" title="${ecs64Data.i18n.changeThumbnail}"><img class="ecs64-category-thumbnail" src="${this.escapeHtml(cat.thumbnail_url)}" alt="" width="32" height="32" /><span class="ecs64-thumbnail-edit dashicons dashicons-edit"></span></span>`;
                     } else {
-                        thumbnailHTML = '<span class="dashicons dashicons-format-image ecs64-no-thumbnail"></span>';
+                        thumbnailHTML = `<span class="ecs64-thumbnail-wrapper ecs64-no-thumbnail-wrapper" data-category-id="${cat.id}" data-type="thumbnail" title="${ecs64Data.i18n.setThumbnail}"><span class="dashicons dashicons-format-image ecs64-no-thumbnail"></span></span>`;
+                    }
+                }
+
+                // Icon HTML for root categories (depth 0) when mega menu is enabled
+                let iconHTML = '';
+                if (depth === 0 && ecs64Data.enableMegaMenuPosition) {
+                    if (cat.icon_url) {
+                        iconHTML = `<span class="ecs64-thumbnail-wrapper ecs64-icon-wrapper" data-category-id="${cat.id}" data-type="icon" title="${ecs64Data.i18n.changeIcon}"><img class="ecs64-category-icon" src="${this.escapeHtml(cat.icon_url)}" alt="" width="24" height="24" /><span class="ecs64-thumbnail-edit dashicons dashicons-edit"></span></span>`;
+                    } else {
+                        iconHTML = `<span class="ecs64-thumbnail-wrapper ecs64-icon-wrapper ecs64-no-icon-wrapper" data-category-id="${cat.id}" data-type="icon" title="${ecs64Data.i18n.setIcon}"><span class="dashicons dashicons-star-empty ecs64-no-icon"></span></span>`;
                     }
                 }
 
@@ -180,6 +206,7 @@
                             
                             <div class="ecs64-category-info">
                                 ${depthDashes}
+                                ${iconHTML}
                                 ${thumbnailHTML}
                                 <span class="ecs64-category-name">${this.escapeHtml(cat.name)}</span>
                                 <span class="ecs64-category-id">(ID: ${cat.id})</span>
@@ -590,6 +617,121 @@
                 setTimeout(function () {
                     $toast.remove();
                 }, 300);
+            });
+        },
+
+        /**
+         * Open WordPress Media Library picker
+         *
+         * @param {number} categoryId
+         * @param {string} type - 'thumbnail' or 'icon'
+         */
+        openMediaPicker: function (categoryId, type) {
+            const self = this;
+            const title = type === 'icon' ? ecs64Data.i18n.selectIcon : ecs64Data.i18n.selectThumbnail;
+            const buttonText = ecs64Data.i18n.useImage;
+
+            const frame = wp.media({
+                title: title,
+                button: { text: buttonText },
+                multiple: false,
+                library: { type: 'image' }
+            });
+
+            frame.on('select', function () {
+                const attachment = frame.state().get('selection').first().toJSON();
+
+                if (type === 'icon') {
+                    self.setIcon(categoryId, attachment.id);
+                } else {
+                    self.setThumbnail(categoryId, attachment.id);
+                }
+            });
+
+            frame.open();
+        },
+
+        /**
+         * Set category thumbnail via API
+         *
+         * @param {number} categoryId
+         * @param {number} attachmentId
+         */
+        setThumbnail: function (categoryId, attachmentId) {
+            const self = this;
+
+            if (this.isLoading) return;
+            this.isLoading = true;
+
+            this.setCategorySaving(categoryId, true);
+            this.showStatus('saving', ecs64Data.i18n.saving);
+
+            wp.apiFetch({
+                path: 'ecs64/v1/update-order',
+                method: 'POST',
+                data: {
+                    category_id: categoryId,
+                    action: 'set_thumbnail',
+                    attachment_id: attachmentId
+                }
+            }).then(response => {
+                if (response.success) {
+                    self.categories = response.categories;
+                    self.renderTree();
+                    self.initSortable();
+                    self.showStatus('saved', ecs64Data.i18n.saved);
+                    self.showSuccessFeedback(categoryId);
+                } else {
+                    self.showStatus('error', response.message || ecs64Data.i18n.error);
+                }
+            }).catch(error => {
+                const message = error.message || error.code || ecs64Data.i18n.error;
+                self.showStatus('error', message);
+            }).finally(() => {
+                self.isLoading = false;
+                self.setCategorySaving(categoryId, false);
+            });
+        },
+
+        /**
+         * Set category icon via API
+         *
+         * @param {number} categoryId
+         * @param {number} attachmentId
+         */
+        setIcon: function (categoryId, attachmentId) {
+            const self = this;
+
+            if (this.isLoading) return;
+            this.isLoading = true;
+
+            this.setCategorySaving(categoryId, true);
+            this.showStatus('saving', ecs64Data.i18n.saving);
+
+            wp.apiFetch({
+                path: 'ecs64/v1/update-order',
+                method: 'POST',
+                data: {
+                    category_id: categoryId,
+                    action: 'set_icon',
+                    attachment_id: attachmentId
+                }
+            }).then(response => {
+                if (response.success) {
+                    self.categories = response.categories;
+                    self.renderTree();
+                    self.initSortable();
+                    self.showStatus('saved', ecs64Data.i18n.saved);
+                    self.showSuccessFeedback(categoryId);
+                } else {
+                    self.showStatus('error', response.message || ecs64Data.i18n.error);
+                }
+            }).catch(error => {
+                const message = error.message || error.code || ecs64Data.i18n.error;
+                self.showStatus('error', message);
+            }).finally(() => {
+                self.isLoading = false;
+                self.setCategorySaving(categoryId, false);
             });
         },
 

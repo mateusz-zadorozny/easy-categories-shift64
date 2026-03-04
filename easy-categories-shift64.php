@@ -91,22 +91,26 @@ function ecs64_register_rest_routes(): void {
 					'type'              => 'integer',
 					'sanitize_callback' => 'absint',
 				),
-				'action'      => array(
+				'action'        => array(
 					'required'          => true,
 					'type'              => 'string',
-					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent', 'set_position' ),
+					'enum'              => array( 'move_up', 'move_down', 'move_left', 'move_right', 'set_order', 'set_parent', 'set_position', 'set_thumbnail', 'set_icon' ),
 					'sanitize_callback' => 'sanitize_text_field',
 				),
-				'position'    => array(
+				'position'      => array(
 					'type'              => 'string',
 					'enum'              => array( 'left', 'right', '' ),
 					'sanitize_callback' => 'sanitize_text_field',
 				),
-				'new_order'   => array(
+				'attachment_id' => array(
 					'type'              => 'integer',
 					'sanitize_callback' => 'absint',
 				),
-				'new_parent'  => array(
+				'new_order'     => array(
+					'type'              => 'integer',
+					'sanitize_callback' => 'absint',
+				),
+				'new_parent'    => array(
 					'type'              => 'integer',
 					'sanitize_callback' => 'absint',
 				),
@@ -228,11 +232,12 @@ function ecs64_handle_bulk_order( \WP_REST_Request $request ): \WP_REST_Response
  * @return \WP_REST_Response The REST response.
  */
 function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Response {
-	$category_id = $request->get_param( 'category_id' );
-	$action      = $request->get_param( 'action' );
-	$new_order   = $request->get_param( 'new_order' );
-	$new_parent  = $request->get_param( 'new_parent' );
-	$position    = $request->get_param( 'position' );
+	$category_id   = $request->get_param( 'category_id' );
+	$action        = $request->get_param( 'action' );
+	$new_order     = $request->get_param( 'new_order' );
+	$new_parent    = $request->get_param( 'new_parent' );
+	$position      = $request->get_param( 'position' );
+	$attachment_id = $request->get_param( 'attachment_id' );
 
 	$manager = new Category_Manager();
 
@@ -267,6 +272,21 @@ function ecs64_handle_update_order( \WP_REST_Request $request ): \WP_REST_Respon
 					);
 				}
 				$result = $manager->set_category_position( $category_id, $position ?? '' );
+				break;
+			case 'set_thumbnail':
+				$result = $manager->set_category_thumbnail( $category_id, $attachment_id ?? 0 );
+				break;
+			case 'set_icon':
+				if ( get_option( 'ecs64_enable_mega_menu_position', '0' ) !== '1' ) {
+					return new \WP_REST_Response(
+						array(
+							'success' => false,
+							'message' => 'Mega menu icon feature is disabled',
+						),
+						403
+					);
+				}
+				$result = $manager->set_category_icon( $category_id, $attachment_id ?? 0 );
 				break;
 			default:
 				return new \WP_REST_Response(
