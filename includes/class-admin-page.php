@@ -198,7 +198,7 @@ class Admin_Page {
 					<?php wp_nonce_field( 'ecs64_save_settings', 'ecs64_settings_nonce' ); ?>
 					<label class="ecs64-setting-row">
 						<input type="checkbox" name="ecs64_enable_mega_menu_position" value="1" <?php checked( get_option( 'ecs64_enable_mega_menu_position', '0' ), '1' ); ?> />
-						<?php esc_html_e( 'Pozycja kolumny w mega menu (L/R)', 'easy-categories-shift64' ); ?>
+						<?php esc_html_e( 'Dodatkowe funkcje motywu (L/R, icons)', 'easy-categories-shift64' ); ?>
 					</label>
 					<p class="description"><?php esc_html_e( 'Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu oraz wyświetla ikony kategorii głównych (merida_mega_menu_category_icon). Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem.', 'easy-categories-shift64' ); ?></p>
 					<?php submit_button( __( 'Zapisz ustawienia', 'easy-categories-shift64' ), 'secondary' ); ?>

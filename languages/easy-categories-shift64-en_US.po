@@ -126,8 +126,8 @@ msgid "Ustawienia zapisane."
 msgstr "Settings saved."
 
 #: includes/class-admin-page.php
-msgid "Pozycja kolumny w mega menu (L/R)"
-msgstr "Mega menu column position (L/R)"
+msgid "Dodatkowe funkcje motywu (L/R, icons)"
+msgstr "Additional theme features (L/R, icons)"
 
 #: includes/class-admin-page.php
 msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu oraz wyświetla ikony kategorii głównych (merida_mega_menu_category_icon). Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."

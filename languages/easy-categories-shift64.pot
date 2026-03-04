@@ -123,7 +123,7 @@ msgid "Ustawienia zapisane."
 msgstr ""
 
 #: includes/class-admin-page.php
-msgid "Pozycja kolumny w mega menu (L/R)"
+msgid "Dodatkowe funkcje motywu (L/R, icons)"
 msgstr ""
 
 #: includes/class-admin-page.php
