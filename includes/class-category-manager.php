@@ -30,6 +30,11 @@ class Category_Manager {
 	private const POSITION_META_KEY = 'merida_mega_menu_column_position';
 
 	/**
+	 * Meta key for mega menu category icon.
+	 */
+	private const ICON_META_KEY = 'merida_mega_menu_category_icon';
+
+	/**
 	 * Get full category tree with hierarchy.
 	 *
 	 * @return array Category tree.
@@ -135,6 +140,7 @@ class Category_Manager {
 					'order'         => (int) get_term_meta( $category->term_id, 'order', true ),
 					'position'      => $this->get_category_position( $category->term_id ),
 					'thumbnail_url' => $this->get_category_thumbnail_url( $category->term_id ),
+					'icon_url'      => $this->get_category_icon_url( $category->term_id ),
 					'has_children'  => ! empty( $children ),
 					'is_childless'  => in_array( $category->term_id, $childless_ids, true ),
 					'children'      => $children,
@@ -165,6 +171,7 @@ class Category_Manager {
 			'count'         => $category->count,
 			'order'         => (int) get_term_meta( $category->term_id, 'order', true ),
 			'thumbnail_url' => $this->get_category_thumbnail_url( $category->term_id ),
+			'icon_url'      => $this->get_category_icon_url( $category->term_id ),
 			'is_childless'  => in_array( $category->term_id, $childless_ids, true ),
 			'has_children'  => false,
 			'children'      => array(),
@@ -379,6 +386,68 @@ class Category_Manager {
 		$url = wp_get_attachment_image_url( $thumbnail_id, 'thumbnail' );
 
 		return $url ? $url : '';
+	}
+
+	/**
+	 * Get category icon URL (mega menu icon).
+	 *
+	 * @param int $category_id Category ID.
+	 * @return string Icon URL or empty string.
+	 */
+	private function get_category_icon_url( int $category_id ): string {
+		$icon_id = (int) get_term_meta( $category_id, self::ICON_META_KEY, true );
+
+		if ( ! $icon_id ) {
+			return '';
+		}
+
+		$url = wp_get_attachment_image_url( $icon_id, 'thumbnail' );
+
+		return $url ? $url : '';
+	}
+
+	/**
+	 * Set category thumbnail (WooCommerce thumbnail_id).
+	 *
+	 * @param int $category_id   Category ID.
+	 * @param int $attachment_id Attachment ID (0 to remove).
+	 * @return bool Success status.
+	 */
+	public function set_category_thumbnail( int $category_id, int $attachment_id ): bool {
+		$category = get_term( $category_id, self::TAXONOMY );
+		if ( ! $category || is_wp_error( $category ) ) {
+			return false;
+		}
+
+		if ( 0 === $attachment_id ) {
+			delete_term_meta( $category_id, 'thumbnail_id' );
+		} else {
+			update_term_meta( $category_id, 'thumbnail_id', $attachment_id );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Set category icon (mega menu icon).
+	 *
+	 * @param int $category_id   Category ID.
+	 * @param int $attachment_id Attachment ID (0 to remove).
+	 * @return bool Success status.
+	 */
+	public function set_category_icon( int $category_id, int $attachment_id ): bool {
+		$category = get_term( $category_id, self::TAXONOMY );
+		if ( ! $category || is_wp_error( $category ) ) {
+			return false;
+		}
+
+		if ( 0 === $attachment_id ) {
+			delete_term_meta( $category_id, self::ICON_META_KEY );
+		} else {
+			update_term_meta( $category_id, self::ICON_META_KEY, $attachment_id );
+		}
+
+		return true;
 	}
 
 	/**

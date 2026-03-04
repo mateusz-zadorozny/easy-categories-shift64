@@ -123,11 +123,47 @@ msgid "Ustawienia zapisane."
 msgstr ""
 
 #: includes/class-admin-page.php
-msgid "Pozycja kolumny w mega menu (L/R)"
+msgid "Dodatkowe funkcje motywu (L/R, icons)"
 msgstr ""
 
 #: includes/class-admin-page.php
-msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
+msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu oraz wyświetla ikony kategorii głównych (merida_mega_menu_category_icon). Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Wybierz miniaturę kategorii"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Wybierz ikonę kategorii"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Użyj tego obrazu"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby zmienić miniaturę"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby ustawić miniaturę"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby zmienić ikonę"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby ustawić ikonę"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Usuń miniaturę"
+msgstr ""
+
+#: includes/class-admin-page.php
+msgid "Usuń ikonę"
 msgstr ""
 
 #: includes/class-admin-page.php

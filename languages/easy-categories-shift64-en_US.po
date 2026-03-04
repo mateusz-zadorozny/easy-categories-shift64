@@ -126,12 +126,48 @@ msgid "Ustawienia zapisane."
 msgstr "Settings saved."
 
 #: includes/class-admin-page.php
-msgid "Pozycja kolumny w mega menu (L/R)"
-msgstr "Mega menu column position (L/R)"
+msgid "Dodatkowe funkcje motywu (L/R, icons)"
+msgstr "Additional theme features (L/R, icons)"
 
 #: includes/class-admin-page.php
-msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
-msgstr "Adds left/right column buttons for first-level subcategories. Enable if your theme uses a mega menu with two-column layout."
+msgid "Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu oraz wyświetla ikony kategorii głównych (merida_mega_menu_category_icon). Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem."
+msgstr "Adds left/right column buttons for first-level subcategories and displays icons for root categories (merida_mega_menu_category_icon). Enable if your theme uses a mega menu with two-column layout."
+
+#: includes/class-admin-page.php
+msgid "Wybierz miniaturę kategorii"
+msgstr "Select category thumbnail"
+
+#: includes/class-admin-page.php
+msgid "Wybierz ikonę kategorii"
+msgstr "Select category icon"
+
+#: includes/class-admin-page.php
+msgid "Użyj tego obrazu"
+msgstr "Use this image"
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby zmienić miniaturę"
+msgstr "Click to change thumbnail"
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby ustawić miniaturę"
+msgstr "Click to set thumbnail"
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby zmienić ikonę"
+msgstr "Click to change icon"
+
+#: includes/class-admin-page.php
+msgid "Kliknij aby ustawić ikonę"
+msgstr "Click to set icon"
+
+#: includes/class-admin-page.php
+msgid "Usuń miniaturę"
+msgstr "Remove thumbnail"
+
+#: includes/class-admin-page.php
+msgid "Usuń ikonę"
+msgstr "Remove icon"
 
 #: includes/class-admin-page.php
 msgid "Zapisz ustawienia"

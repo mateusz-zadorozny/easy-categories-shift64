@@ -75,6 +75,9 @@ class Admin_Page {
 			return;
 		}
 
+		// WordPress Media Library.
+		wp_enqueue_media();
+
 		// jQuery UI Sortable.
 		wp_enqueue_script( 'jquery-ui-sortable' );
 
@@ -117,9 +120,18 @@ class Admin_Page {
 					'moveLeft'      => __( 'Przesuń w lewo (wyższy poziom)', 'easy-categories-shift64' ),
 					'moveRight'     => __( 'Przesuń w prawo (niższy poziom)', 'easy-categories-shift64' ),
 					'products'      => __( 'produktów', 'easy-categories-shift64' ),
-					'positionLeft'  => __( 'Lewa kolumna', 'easy-categories-shift64' ),
-					'positionRight' => __( 'Prawa kolumna', 'easy-categories-shift64' ),
-					'positionNone'  => __( 'Nie ustawiono', 'easy-categories-shift64' ),
+					'positionLeft'       => __( 'Lewa kolumna', 'easy-categories-shift64' ),
+					'positionRight'      => __( 'Prawa kolumna', 'easy-categories-shift64' ),
+					'positionNone'       => __( 'Nie ustawiono', 'easy-categories-shift64' ),
+					'selectThumbnail'    => __( 'Wybierz miniaturę kategorii', 'easy-categories-shift64' ),
+					'selectIcon'         => __( 'Wybierz ikonę kategorii', 'easy-categories-shift64' ),
+					'useImage'           => __( 'Użyj tego obrazu', 'easy-categories-shift64' ),
+					'changeThumbnail'    => __( 'Kliknij aby zmienić miniaturę', 'easy-categories-shift64' ),
+					'setThumbnail'       => __( 'Kliknij aby ustawić miniaturę', 'easy-categories-shift64' ),
+					'changeIcon'         => __( 'Kliknij aby zmienić ikonę', 'easy-categories-shift64' ),
+					'setIcon'            => __( 'Kliknij aby ustawić ikonę', 'easy-categories-shift64' ),
+					'removeThumbnail'    => __( 'Usuń miniaturę', 'easy-categories-shift64' ),
+					'removeIcon'         => __( 'Usuń ikonę', 'easy-categories-shift64' ),
 				),
 			)
 		);
@@ -186,9 +198,9 @@ class Admin_Page {
 					<?php wp_nonce_field( 'ecs64_save_settings', 'ecs64_settings_nonce' ); ?>
 					<label class="ecs64-setting-row">
 						<input type="checkbox" name="ecs64_enable_mega_menu_position" value="1" <?php checked( get_option( 'ecs64_enable_mega_menu_position', '0' ), '1' ); ?> />
-						<?php esc_html_e( 'Pozycja kolumny w mega menu (L/R)', 'easy-categories-shift64' ); ?>
+						<?php esc_html_e( 'Dodatkowe funkcje motywu (L/R, icons)', 'easy-categories-shift64' ); ?>
 					</label>
-					<p class="description"><?php esc_html_e( 'Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu. Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem.', 'easy-categories-shift64' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Dodaje przyciski lewa/prawa kolumna dla podkategorii pierwszego poziomu oraz wyświetla ikony kategorii głównych (merida_mega_menu_category_icon). Włącz jeśli Twój motyw używa mega menu z dwukolumnowym układem.', 'easy-categories-shift64' ); ?></p>
 					<?php submit_button( __( 'Zapisz ustawienia', 'easy-categories-shift64' ), 'secondary' ); ?>
 				</form>
 			</div>
