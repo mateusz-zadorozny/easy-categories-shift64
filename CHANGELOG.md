@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.4.0...v1.4.1) (2026-03-06)
+
+
+### Bug Fixes
+
+* add Release Asset header and sync ECS64_VERSION constant ([c740a6e](https://github.com/mateusz-zadorozny/easy-categories-shift64/commit/c740a6ed7b4668361531c49ccc7cbf74c8013f49))
+
 # [1.4.0](https://github.com/mateusz-zadorozny/easy-categories-shift64/compare/v1.3.0...v1.4.0) (2026-03-04)
 
 

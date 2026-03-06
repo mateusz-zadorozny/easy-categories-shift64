@@ -6,7 +6,7 @@
  * Author URI:      https://shift64.com
  * Text Domain:     easy-categories-shift64
  * Domain Path:     /languages
- * Version:         1.4.0
+ * Version:         1.4.1
  * Requires PHP:    8.0
  * Requires at least: 6.8
  * WC requires at least: 10.0
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'ECS64_VERSION', '1.4.0' );
+define( 'ECS64_VERSION', '1.4.1' );
 define( 'ECS64_PLUGIN_FILE', __FILE__ );
 define( 'ECS64_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ECS64_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
