@@ -13,6 +13,8 @@
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * GitHub Plugin URI: mateusz-zadorozny/easy-categories-shift64
+ * Primary Branch:    master
+ * Release Asset:     true
  *
  * @package Easy_Categories_Shift64
  */
@@ -27,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'ECS64_VERSION', '0.0.1' );
+define( 'ECS64_VERSION', '1.4.0' );
 define( 'ECS64_PLUGIN_FILE', __FILE__ );
 define( 'ECS64_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ECS64_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
